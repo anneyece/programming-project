@@ -34,10 +34,16 @@ Spring = fre['03'] + fre['04'] +  fre['05']
 Summer = fre['06'] + fre['07'] +  fre['08']
 Fall = fre['09'] + fre['10'] +  fre['11']
 
-print(Winter)
-print(Spring)
-print(Summer)
-print(Fall)
+# Seasons Average
+Average_Winter = Winter / 3
+Average_Spring = Spring / 3
+Average_Summer = Summer / 3
+Average_Fall = Fall / 3
+
+print(Average_Winter)
+print(Average_Spring)
+print(Average_Summer)
+print(Average_Fall)
 
 # Area Names
 Are = { }
@@ -64,18 +70,17 @@ for place in area :
 "plt.title('Percentage of Crimes committed in different LA Regions')"
 
 
-
-# Seasons and Area on a plot (Bar + Line)
+# Seasons and Months on a plot (Bar + Line)
 
 # Seasons Bar plot code
-plt.bar(['Winter','Spring', 'Summer','Fall'],[Winter, Spring, Summer, Fall])
-plt.xlabel('Seasons')
-plt.ylabel('Number of crimes')
-plt.title('Crimes committed per Season')
+"plt.bar(['Winter','Spring', 'Summer','Fall'],[Winter, Spring, Summer, Fall])"
+"plt.xlabel('Seasons')"
+"plt.ylabel('Number of crimes')"
+"plt.title('Crimes committed per Season')"
 
 
-# Areas Line plot code
-plt.plot(Are.keys(),Are.values())
+# Months Line plot code
+plt.plot(fre.keys(),fre.values())
 plt.xticks(rotation=90)
 
 
