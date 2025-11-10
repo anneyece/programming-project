@@ -3,7 +3,7 @@
 """
 Created on Mon Oct 13 19:26:10 2025
 
-@author: anneyece isabel castro ramos and yolina bakhos
+@author: anneyece isabel castro ramos and yolina bakhos :<
 """
 
 import pandas as pd
@@ -14,6 +14,107 @@ df = pd.read_csv("/Users/isabel/Desktop/Crime_Data_from_2020_to_Present.csv")
 date_occured = df["DATE OCC"]
 area = df["AREA NAME"]
 time_occ = df['TIME OCC']
+
+# =============================================================================
+# 
+# =============================================================================
+
+                #LIA deliverable 3: Exploratory Data Analysis
+
+
+# 1. Preliminary steps
+
+#a) Initial data inspection:
+
+#b) Handle duplicate entries:
+
+#c) Identify and manage missing values:
+
+#d) Correct data types and formats:
+
+    
+# 2. Univariate non-graphical EDA
+
+
+# 3. Univariate graphical EDA
+
+#a) Custom and appropriate number of bins
+
+#b) Conditioning on other variables
+
+#c) Stacked histogram
+
+#d) Dodge bars
+
+#e) Normalized histogram statistics
+
+#f) Kernel density estimation (choosing the smoothing bandwidth)
+
+#g) Empirical cumulative distributions
+
+
+# 4. Multivariate non-graphical EDA
+
+
+#a) Make use of this approach at least 3 times with different variables from your dataset.
+
+#b) Now use proportions or percentages rather than raw counts (use the “normalize” parameter from crosstab())
+
+#c) Generate at least one three-way frequency table (3 or more variables, by giving a list of variables to crosstab() rather than single variables)
+
+
+# 5. Multivariate graphical EDA (18 plots)
+
+# statistical relationships (5 plots):
+
+#a) plot using Faceting feature (col parameter in the relplot() function)
+
+#b) plot representing 5 variables at once (x, y, hue, size, col)
+
+#c) plot using line instead of points (find a variable that makes sense emphasizing continuity and explain why)
+
+#d) plot illustrating standard deviation
+
+#e) plot including a linear regression
+
+
+# categorical data (10 plots):
+
+#a) categorical scatter plot with jitter enabled
+
+#b) categorical scatter plot with jitter disabled (explain your choice of variable for this one)
+
+#c) “beeswarm” plot representing 3 variables
+
+#d) box plot representing 3 variables
+
+#e) box plot showing the shape of the distribution (boxenplot())
+
+#f) split violin plot representing 3 variables with bandwidth adjusted for better visualization
+
+#g) violin plot with scatter points inside the violin shapes
+
+#h) bar plot representing 3 variables showing 97% confidence intervals
+
+#i) point plot representing 3 variables showing 90% confidence intervals and lines in dashed style
+
+#j) bar plot showing the number of observations in each category
+
+
+# bivariate distributions (3 plots):
+
+#a) “heatmap” plot representing 2 variables with color intensity bar and adjusted bin width.
+
+#b) distribution plot with 2 variables making use of bivariate density contours with amount of curves and its lowest level adjusted (use a kernel density estimation displot()).
+
+#c) “heatmap” plot representing 3 variables, again of kind kde.
+
+# =============================================================================
+# 
+# =============================================================================  
+
+                #LIA deliverable 2: Visualizing your dataset
+
 
 # Months
 fre = { } # Dictionary that is currently empty
@@ -39,7 +140,7 @@ plt.bar(['Winter','Spring', 'Summer','Fall'],[Winter, Spring, Summer, Fall]) # C
 
 plt.xlabel('Seasons') # Title of X axis
 plt.ylabel('Total number of crimes committed') # Title of Y axis
-plt.title('Crime Trends per Seasons') # Title of Graph 
+plt.title('Crime Trends per Seasons (2020-2024)') # Title of Graph 
 plt.show() # Displays the graph
 
 
@@ -125,13 +226,13 @@ plt.xticks(rotation=90) # This rotates the x values (districts) so that it does 
 
 plt.xlabel('LA Disctricts') # Title of X axis 
 plt.ylabel('Number of Crimes Committed') # Title of Y axis
-plt.title('Crimes Trends per LA Districts') # Title of Graph 
+plt.title('Crimes Trends per LA Districts (2020-2024)') # Title of Graph 
 plt.show() # Displays the graph
 
 # Area on a plot (Pie)
 plt.pie(Are.values(), labels = Are.keys(), autopct='%1.1f%%') # Creating pie graph, y values = values which are number of crimes commited, x values = keys which are the different LA Districts, displaying the percentage
 
-plt.title('Percentage of Crimes committed in different LA Districts') # Title of the Graph since axis do not represnt correctly due to the form of a pie graph that is why we did not include them 
+plt.title('Percentage of Crimes committed in different LA Districts (2020-2024)') # Title of the Graph since axis do not represnt correctly due to the form of a pie graph that is why we did not include them 
 plt.tight_layout() # Makes sure that the names do not for sure overlap 
 plt.show() # Displays the graph
 
@@ -147,7 +248,7 @@ plt.plot(['Winter','Spring', 'Summer','Fall'],[Winter, Spring, Summer, Fall]) # 
 plt.subplot(1,2,2) # Intention to make subplot with 1 row and 2 columns, focusing on the second plot
 plt.plot(sorted_months ,fre.values()) # Creating linear graph, x values = list of different months (sorted), y values = number of crimes commited 
 
-plt.title('Crime Trends per Seasons and Months') # Title of Graph
+plt.title('Crime Trends per Seasons and Months (2020-2024)') # Title of Graph
 plt.tight_layout() # Makes sure titles dont overlap
 plt.show() # Displays the graph
 
@@ -170,7 +271,7 @@ plt.bar(time_of_crime.keys(), time_of_crime.values(), width=1) # Creating bar gr
 
 plt.xlabel('Hours within a day') # title of X axis 
 plt.ylabel('Number of crimes') # title of Y axis 
-plt.title('Crimes committed depending on the time of day') # Title of Graph 
+plt.title('Crimes committed depending on the time of day (2020-2024)') # Title of Graph 
 plt.show() # Displays the graph
 
 # Time on a plot (Scatter)
@@ -178,7 +279,7 @@ plt.scatter(time_of_crime.keys(), time_of_crime.values()) # Creating scatter gra
 
 plt.xlabel('Hours within a day') # Title of X axis
 plt.ylabel('Number of Crimes Committed') # Title of Y axis
-plt.title('Crimes committed depending on the time of day') # Title of Graph 
+plt.title('Crimes committed depending on the time of day (2020-2024)') # Title of Graph 
 plt.show() # Displays the graph
 
 # Time on a plot (Scatter + Grid)
@@ -188,8 +289,10 @@ plt.scatter(time_of_crime.keys(), time_of_crime.values()) # Creating scatter gra
 plt.grid() # Add a grid
 plt.xlabel('Hours within a day') # Title of X axis
 plt.ylabel('Number of crimes') # Title of Y axis
-plt.title('Crimes committed depending on the time of day') # Title of Graph 
+plt.title('Crimes committed depending on the time of day (2020-2024)') # Title of Graph 
 plt.show() # Displays the graph
+
+
 
 
 
