@@ -17,100 +17,6 @@ time_occ = df['TIME OCC']
 
 # =============================================================================
 # 
-# =============================================================================
-
-                #LIA deliverable 3: Exploratory Data Analysis
-
-
-# 1. Preliminary steps
-
-#a) Initial data inspection:
-
-#b) Handle duplicate entries:
-
-#c) Identify and manage missing values:
-
-#d) Correct data types and formats:
-
-    
-# 2. Univariate non-graphical EDA
-
-
-# 3. Univariate graphical EDA
-
-#a) Custom and appropriate number of bins
-
-#b) Conditioning on other variables
-
-#c) Stacked histogram
-
-#d) Dodge bars
-
-#e) Normalized histogram statistics
-
-#f) Kernel density estimation (choosing the smoothing bandwidth)
-
-#g) Empirical cumulative distributions
-
-
-# 4. Multivariate non-graphical EDA
-
-
-#a) Make use of this approach at least 3 times with different variables from your dataset.
-
-#b) Now use proportions or percentages rather than raw counts (use the “normalize” parameter from crosstab())
-
-#c) Generate at least one three-way frequency table (3 or more variables, by giving a list of variables to crosstab() rather than single variables)
-
-
-# 5. Multivariate graphical EDA (18 plots)
-
-# statistical relationships (5 plots):
-
-#a) plot using Faceting feature (col parameter in the relplot() function)
-
-#b) plot representing 5 variables at once (x, y, hue, size, col)
-
-#c) plot using line instead of points (find a variable that makes sense emphasizing continuity and explain why)
-
-#d) plot illustrating standard deviation
-
-#e) plot including a linear regression
-
-
-# categorical data (10 plots):
-
-#a) categorical scatter plot with jitter enabled
-
-#b) categorical scatter plot with jitter disabled (explain your choice of variable for this one)
-
-#c) “beeswarm” plot representing 3 variables
-
-#d) box plot representing 3 variables
-
-#e) box plot showing the shape of the distribution (boxenplot())
-
-#f) split violin plot representing 3 variables with bandwidth adjusted for better visualization
-
-#g) violin plot with scatter points inside the violin shapes
-
-#h) bar plot representing 3 variables showing 97% confidence intervals
-
-#i) point plot representing 3 variables showing 90% confidence intervals and lines in dashed style
-
-#j) bar plot showing the number of observations in each category
-
-
-# bivariate distributions (3 plots):
-
-#a) “heatmap” plot representing 2 variables with color intensity bar and adjusted bin width.
-
-#b) distribution plot with 2 variables making use of bivariate density contours with amount of curves and its lowest level adjusted (use a kernel density estimation displot()).
-
-#c) “heatmap” plot representing 3 variables, again of kind kde.
-
-# =============================================================================
-# 
 # =============================================================================  
 
                 #LIA deliverable 2: Visualizing your dataset
@@ -293,9 +199,149 @@ plt.title('Crimes committed depending on the time of day (2020-2024)') # Title o
 plt.show() # Displays the graph
 
 
+# =============================================================================
+# 
+# =============================================================================
+
+                #LIA deliverable 3: Exploratory Data Analysis
+
+
+# 1. Preliminary steps
+
+#a) Initial data inspection:
+print(" ")
+print("Overview of the data structure:")
+print(" ")
+
+print(df.head())
+print(" ")
+print(df.info())
+print(" ")
+print(df.describe())
+
+
+#b) Handle duplicate entries:
+print(" ")
+print("Identifying duplicates:")
+print(" ")
+
+print(df.duplicated())
+
+    #ANSWER --> There are duplicates. Even if there were any we would not remove
+
+
+#c) Identify and manage missing values:
+
+    #(c) fill categorical missing values with some string of your choice. Justify your decision.
+
+#looking at .info, "Vict Age" and "Vict Sex" has nulls
+
+
+filled_vict = {"Vict Sex":"U"}
+
+new_df = df.fillna(filled_vict) 
+
+
+#d) Correct data types and formats:
+
+# ---> not needed
 
 
 
+
+
+# 2. Univariate non-graphical EDA
+
+# Numerical Value
+
+# 1 - Vict Age
+
+print(df["Vict Age"].describe())
+print("median :",df["Vict Age"].median())
+print("skewness :",df["Vict Age"].skew())
+print("kurtosis :",df["Vict Age"].kurtosis())
+
+# Categorical Value
+
+# 1 - Vict Sex
+
+print(df["Vict Sex"].value_counts())
+
+# 2 - Date Occured (date_occured)
+
+# 3 - LA Disctrict (area)
+
+# 4 - Time Occured (time_occ)
+
+
+# 3. Univariate graphical EDA
+
+#a) Custom and appropriate number of bins
+
+#b) Conditioning on other variables
+
+#c) Stacked histogram
+
+#d) Dodge bars
+
+#e) Normalized histogram statistics
+
+#f) Kernel density estimation (choosing the smoothing bandwidth)
+
+#g) Empirical cumulative distributions
+
+
+# 4. Multivariate non-graphical EDA
+
+#a) Make use of this approach at least 3 times with different variables from your dataset.
+
+#b) Now use proportions or percentages rather than raw counts (use the “normalize” parameter from crosstab())
+
+#c) Generate at least one three-way frequency table (3 or more variables, by giving a list of variables to crosstab() rather than single variables)
+
+
+# 5. Multivariate graphical EDA (18 plots)
+
+# statistical relationships (5 plots):
+#a) plot using Faceting feature (col parameter in the relplot() function)
+
+#b) plot representing 5 variables at once (x, y, hue, size, col)
+
+#c) plot using line instead of points (find a variable that makes sense emphasizing continuity and explain why)
+
+#d) plot illustrating standard deviation
+
+#e) plot including a linear regression
+
+
+# categorical data (10 plots):
+#a) categorical scatter plot with jitter enabled
+
+#b) categorical scatter plot with jitter disabled (explain your choice of variable for this one)
+
+#c) “beeswarm” plot representing 3 variables
+
+#d) box plot representing 3 variables
+
+#e) box plot showing the shape of the distribution (boxenplot())
+
+#f) split violin plot representing 3 variables with bandwidth adjusted for better visualization
+
+#g) violin plot with scatter points inside the violin shapes
+
+#h) bar plot representing 3 variables showing 97% confidence intervals
+
+#i) point plot representing 3 variables showing 90% confidence intervals and lines in dashed style
+
+#j) bar plot showing the number of observations in each category
+
+
+# bivariate distributions (3 plots):
+#a) “heatmap” plot representing 2 variables with color intensity bar and adjusted bin width.
+
+#b) distribution plot with 2 variables making use of bivariate density contours with amount of curves and its lowest level adjusted (use a kernel density estimation displot()).
+
+#c) “heatmap” plot representing 3 variables, again of kind kde.
 
 
 
