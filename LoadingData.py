@@ -8,12 +8,9 @@ Created on Mon Oct 13 19:26:10 2025
 
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 df = pd.read_csv("/Users/isabel/Desktop/Crime_Data_from_2020_to_Present.csv")
-
-date_occured = df["DATE OCC"]
-area = df["AREA NAME"]
-time_occ = df['TIME OCC']
 
 # =============================================================================
 # 
@@ -21,6 +18,9 @@ time_occ = df['TIME OCC']
 
                 #LIA deliverable 2: Visualizing your dataset
 
+date_occured = df["DATE OCC"]
+area = df["AREA NAME"]
+time_occ = df['TIME OCC']
 
 # Months
 fre = { } # Dictionary that is currently empty
@@ -206,11 +206,30 @@ plt.show() # Displays the graph
                 #LIA deliverable 3: Exploratory Data Analysis
 
 
+#Considering our questions we will add these columns
+
+df["Month"] = df["DATE OCC"].str[:2]
+
+Seasons = []
+
+for s in df["Month"]:
+  if s in ["12", "01", "02"]:
+      Seasons.append("Winter")
+  elif s in ["03", "04", "05"]:
+      Seasons.append("Spring")
+  elif s in ["06", "07", "08"]:
+      Seasons.append("Summer")
+  else:
+      Seasons.append("Fall")
+
+df["Seasons"] = Seasons
+
+
 # 1. Preliminary steps
 
 #a) Initial data inspection:
 print(" ")
-print("Overview of the data structure:")
+print("Overview of the Data Structure:")
 print(" ")
 
 print(df.head())
@@ -222,31 +241,29 @@ print(df.describe())
 
 #b) Handle duplicate entries:
 print(" ")
-print("Identifying duplicates:")
+print("Identifying Duplicates:")
 print(" ")
 
 print(df.duplicated())
 
-    #ANSWER --> There are duplicates. Even if there were any we would not remove
+    #ANSWER --> There are duplicates.
 
 
 #c) Identify and manage missing values:
+  
+print(" ")
+print("Identifying Missing Values:")
+print(" ")
+
+print(df.isnull())
+
+#looking at .info(), "Vict Age" and "Vict Sex" has nulls
 
     #(c) fill categorical missing values with some string of your choice. Justify your decision.
 
-#looking at .info, "Vict Age" and "Vict Sex" has nulls
-
-
 filled_vict = {"Vict Sex":"U"}
 
-new_df = df.fillna(filled_vict) 
-
-
-#d) Correct data types and formats:
-
-# ---> not needed
-
-
+updated_vict_sex_df = df.fillna(filled_vict) 
 
 
 
@@ -254,7 +271,11 @@ new_df = df.fillna(filled_vict)
 
 # Numerical Value
 
-# 1 - Vict Age
+# 1 only - Vict Age
+
+print(" ")
+print("Descriptive Statistics of Victim Age:")
+print(" ")
 
 print(df["Vict Age"].describe())
 print("median :",df["Vict Age"].median())
@@ -263,41 +284,106 @@ print("kurtosis :",df["Vict Age"].kurtosis())
 
 # Categorical Value
 
-# 1 - Vict Sex
+# 5 different - Vict Sex - DATE OCC - AREA NAME - TIME OCC
 
-print(df["Vict Sex"].value_counts())
+print(" ")
+print("Descriptive Statistics of the Different Categorical Variables:")
+print(" ")
 
-# 2 - Date Occured (date_occured)
+crime_data_categorical = ["Vict Sex", "DATE OCC", "AREA NAME", "TIME OCC"]
 
-# 3 - LA Disctrict (area)
+for i in crime_data_categorical:
+    print("Frequency of", i)
+    print(df[i].value_counts())
+    print(" ")
+    print("Prpportion of", i)
+    print(df[i].value_counts(normalize=True))
+    print(" ")
+    print("Mode of", i)
+    print(df[i].mode())
+    print(" ")
 
-# 4 - Time Occured (time_occ)
 
 
 # 3. Univariate graphical EDA
 
-#a) Custom and appropriate number of bins
+    #We ony have one numerical variable (sorry sir Tiago) --> Victim Age (Vict Age)
+
+updated_vict_age_df = df.drop(df[df["Vict Age"] == 0 ].index)
 
 #b) Conditioning on other variables
+sns.displot(updated_vict_age_df, x="Vict Age", binwidth=2, hue="Vict Sex", element="step")
 
 #c) Stacked histogram
+sns.displot(updated_vict_age_df, x="Vict Age", binwidth=2, hue="Vict Sex", multiple="stack")
 
 #d) Dodge bars
+sns.displot(updated_vict_age_df, x="Vict Age", binwidth=6, hue="Vict Sex", multiple="dodge")
 
 #e) Normalized histogram statistics
+sns.displot(updated_vict_age_df, x="Vict Age", binwidth=5, hue="Vict Sex", stat="density" , common_norm=False)
 
 #f) Kernel density estimation (choosing the smoothing bandwidth)
+sns.displot(updated_vict_age_df, x="Vict Age", kind="kde", bw_adjust=.50)
 
 #g) Empirical cumulative distributions
+sns.displot(updated_vict_age_df, x="Vict Age", kind="ecdf")
+
+
 
 
 # 4. Multivariate non-graphical EDA
 
 #a) Make use of this approach at least 3 times with different variables from your dataset.
+print(" ")
+print("CrossTab Relationships between LA District and Time Occurred:")
+print(" ")
+
+print(pd.crosstab(df["AREA NAME"],df["TIME OCC"]))
+
+print(" ")
+print("CrossTab Relationships between Months and Time Occurred:")
+print(" ")
+
+print(pd.crosstab(df["Month"],df["TIME OCC"]))
+
+print(" ")
+print("CrossTab Relationships between Seasons and Time Occurred:")
+print(" ")
+
+print(pd.crosstab(df["Seasons"],df["TIME OCC"]))
 
 #b) Now use proportions or percentages rather than raw counts (use the “normalize” parameter from crosstab())
 
+print(" ")
+print("CrossTab Relationships between LA District and Time Occurred (Proportion):")
+print(" ")
+
+print(pd.crosstab(df["AREA NAME"],df["TIME OCC"], normalize="all"))
+print(pd.crosstab(df["AREA NAME"],df["TIME OCC"], normalize="index"))
+print(pd.crosstab(df["AREA NAME"],df["TIME OCC"], normalize="columns"))
+
+print(" ")
+print("CrossTab Relationships between Months and Time Occurred (Proportion):")
+print(" ")
+
+print(pd.crosstab(df["Month"],df["TIME OCC"], normalize="all"))
+print(pd.crosstab(df["Month"],df["TIME OCC"], normalize="index"))
+print(pd.crosstab(df["Month"],df["TIME OCC"], normalize="columns"))
+
+print(" ")
+print("CrossTab Relationships between Seasons and Time Occurred (Proportion):")
+print(" ")
+
+print(pd.crosstab(df["Seasons"],df["TIME OCC"], normalize="all"))
+print(pd.crosstab(df["Seasons"],df["TIME OCC"], normalize="index"))
+print(pd.crosstab(df["Seasons"],df["TIME OCC"], normalize="columns"))
+
 #c) Generate at least one three-way frequency table (3 or more variables, by giving a list of variables to crosstab() rather than single variables)
+
+print(pd.crosstab(index=[df["AREA NAME"],df["TIME OCC"]], columns=df["Month"]))
+
+    
 
 
 # 5. Multivariate graphical EDA (18 plots)
