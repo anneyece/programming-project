@@ -15,7 +15,8 @@ df = pd.read_csv("/Users/isabel/Desktop/Crime_Data_from_2020_to_Present.csv")
 # =============================================================================
 # 
 # =============================================================================  
-"""
+
+
                 #LIA deliverable 2: Visualizing your dataset
 
 date_occured = df["DATE OCC"]
@@ -198,7 +199,7 @@ plt.ylabel('Number of crimes') # Title of Y axis
 plt.title('Crimes committed depending on the time of day (2020-2024)') # Title of Graph 
 plt.show() # Displays the graph
 
-"""
+
 # =============================================================================
 # 
 # =============================================================================
@@ -230,13 +231,15 @@ print(" ")
 print(df.duplicated())
 
 
-#c) Identify and manage missing values:
+#c) Identify missing values:
   
 print(" ")
 print("Identifying Missing Values:")
 print(" ")
 
 print(df.isnull())
+
+#c) Managing missing values:
 
     #option 1 - fill categorical missing values with some string of your choice. Justify your decision.
 
@@ -245,11 +248,6 @@ df["Vict Sex"] = df["Vict Sex"].map({"X": "U", "H": "U","-": "U", "F": "F","M": 
 filled_vict = {"Vict Sex":"U"}
 
 new_df = df.fillna(filled_vict)
-
-
-    #option 2 - drop rows with missing values
-    
-new_df_isolate_vict_age = new_df.drop(new_df[new_df["Vict Age"] == 0].index)
 
 
 #d) Correct data types and formats
@@ -270,7 +268,11 @@ for s in new_df["Month"]:
 
 new_df["Seasons"] = Seasons
 
+#c) Managing missing values:
 
+    #option 2 - drop rows with missing values
+    
+new_df_isolate_vict_age = new_df.drop(new_df[new_df["Vict Age"] == 0].index)
 
 # 2. Univariate non-graphical EDA
 
@@ -392,49 +394,104 @@ print(pd.crosstab(index=[new_df["AREA NAME"],new_df["TIME OCC"]], columns=new_df
 
     
 
-
+"""
 # 5. Multivariate graphical EDA (18 plots)
 
 # statistical relationships (5 plots):
 #a) plot using Faceting feature (col parameter in the relplot() function)
 
+sns.displot(new_df_isolate_vict_age, x="Vict Age", col="Vict Sex")
+
 #b) plot representing 5 variables at once (x, y, hue, size, col)
+
+sns.displot(new_df_isolate_vict_age, x="Vict Age", hue="AREA NAME", size="Seasons", col="Vict Sex")
 
 #c) plot using line instead of points (find a variable that makes sense emphasizing continuity and explain why)
 
+sns.relplot(new_df_isolate_vict_age, x="Vict Age", y='something' kind="line")
+
 #d) plot illustrating standard deviation
 
+sns.relplot(new_df_isolate_vict_age, x="Vict Age", y='something', errorbar="sd", kind="line")
+
 #e) plot including a linear regression
+
+sns.lmplot(new_df_isolate_vict_age, x="Vict Age", y='something', col="Vict Sex", hue="AREA NAME")
+
+"""
 
 
 # categorical data (10 plots):
 #a) categorical scatter plot with jitter enabled
 
+sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age")
+
 #b) categorical scatter plot with jitter disabled (explain your choice of variable for this one)
+
+sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", jitter=False)
 
 #c) “beeswarm” plot representing 3 variables
 
+sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", kind="swarm")
+
 #d) box plot representing 3 variables
+
+sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", hue="Vict Sex", kind="box")
 
 #e) box plot showing the shape of the distribution (boxenplot())
 
+sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", kind="boxen")
+
 #f) split violin plot representing 3 variables with bandwidth adjusted for better visualization
+
+sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", hue="Vict Sex", kind="violin", bw_adjust=4 )
 
 #g) violin plot with scatter points inside the violin shapes
 
+v = sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", kind="violin", inner=None)
+sns.swarmplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age",ax=v.ax)
+
 #h) bar plot representing 3 variables showing 97% confidence intervals
 
+sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", hue="Vict Sex", kind="bar", errorbar=("pi", 97))
+            
 #i) point plot representing 3 variables showing 90% confidence intervals and lines in dashed style
 
+sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", hue="Vict Sex", kind="point", linestyles=["-", "- -"], errorbar=("pi", 90))
+
 #j) bar plot showing the number of observations in each category
+
 
 
 # bivariate distributions (3 plots):
 #a) “heatmap” plot representing 2 variables with color intensity bar and adjusted bin width.
 
+
+
 #b) distribution plot with 2 variables making use of bivariate density contours with amount of curves and its lowest level adjusted (use a kernel density estimation displot()).
 
+
+
 #c) “heatmap” plot representing 3 variables, again of kind kde.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
