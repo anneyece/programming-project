@@ -15,7 +15,7 @@ df = pd.read_csv("/Users/isabel/Desktop/Crime_Data_from_2020_to_Present.csv")
 # =============================================================================
 # 
 # =============================================================================  
-
+"""
                 #LIA deliverable 2: Visualizing your dataset
 
 date_occured = df["DATE OCC"]
@@ -198,7 +198,7 @@ plt.ylabel('Number of crimes') # Title of Y axis
 plt.title('Crimes committed depending on the time of day (2020-2024)') # Title of Graph 
 plt.show() # Displays the graph
 
-
+"""
 # =============================================================================
 # 
 # =============================================================================
@@ -206,23 +206,6 @@ plt.show() # Displays the graph
                 #LIA deliverable 3: Exploratory Data Analysis
 
 
-#Considering our questions we will add these columns
-
-df["Month"] = df["DATE OCC"].str[:2]
-
-Seasons = []
-
-for s in df["Month"]:
-  if s in ["12", "01", "02"]:
-      Seasons.append("Winter")
-  elif s in ["03", "04", "05"]:
-      Seasons.append("Spring")
-  elif s in ["06", "07", "08"]:
-      Seasons.append("Summer")
-  else:
-      Seasons.append("Fall")
-
-df["Seasons"] = Seasons
 
 
 # 1. Preliminary steps
@@ -246,8 +229,6 @@ print(" ")
 
 print(df.duplicated())
 
-    #ANSWER --> There are duplicates.
-
 
 #c) Identify and manage missing values:
   
@@ -257,13 +238,37 @@ print(" ")
 
 print(df.isnull())
 
-#looking at .info(), "Vict Age" and "Vict Sex" has nulls
+    #option 1 - fill categorical missing values with some string of your choice. Justify your decision.
 
-    #(c) fill categorical missing values with some string of your choice. Justify your decision.
+df["Vict Sex"] = df["Vict Sex"].map({"X": "U", "H": "U","-": "U", "F": "F","M": "M"})
 
 filled_vict = {"Vict Sex":"U"}
 
-updated_vict_sex_df = df.fillna(filled_vict) 
+new_df = df.fillna(filled_vict)
+
+
+    #option 2 - drop rows with missing values
+    
+new_df_isolate_vict_age = new_df.drop(new_df[new_df["Vict Age"] == 0].index)
+
+
+#d) Correct data types and formats
+
+new_df["Month"] = new_df["DATE OCC"].str[:2]
+
+Seasons = []
+
+for s in new_df["Month"]:
+  if s in ["12", "01", "02"]:
+      Seasons.append("Winter")
+  elif s in ["03", "04", "05"]:
+      Seasons.append("Spring")
+  elif s in ["06", "07", "08"]:
+      Seasons.append("Summer")
+  else:
+      Seasons.append("Fall")
+
+new_df["Seasons"] = Seasons
 
 
 
@@ -277,10 +282,10 @@ print(" ")
 print("Descriptive Statistics of Victim Age:")
 print(" ")
 
-print(df["Vict Age"].describe())
-print("median :",df["Vict Age"].median())
-print("skewness :",df["Vict Age"].skew())
-print("kurtosis :",df["Vict Age"].kurtosis())
+print(new_df_isolate_vict_age["Vict Age"].describe())
+print("median :",new_df_isolate_vict_age["Vict Age"].median())
+print("skewness :",new_df_isolate_vict_age["Vict Age"].skew())
+print("kurtosis :",new_df_isolate_vict_age["Vict Age"].kurtosis())
 
 # Categorical Value
 
@@ -293,14 +298,14 @@ print(" ")
 crime_data_categorical = ["Vict Sex", "DATE OCC", "AREA NAME", "TIME OCC"]
 
 for i in crime_data_categorical:
-    print("Frequency of", i)
-    print(df[i].value_counts())
+    print("Frequency of", i, ":")
+    print(new_df[i].value_counts())
     print(" ")
-    print("Prpportion of", i)
-    print(df[i].value_counts(normalize=True))
+    print("Proportion of", i, ":")
+    print(new_df[i].value_counts(normalize=True))
     print(" ")
-    print("Mode of", i)
-    print(df[i].mode())
+    print("Mode of", i, ":")
+    print(new_df[i].mode())
     print(" ")
 
 
@@ -309,25 +314,23 @@ for i in crime_data_categorical:
 
     #We ony have one numerical variable (sorry sir Tiago) --> Victim Age (Vict Age)
 
-updated_vict_age_df = df.drop(df[df["Vict Age"] == 0 ].index)
-
 #b) Conditioning on other variables
-sns.displot(updated_vict_age_df, x="Vict Age", binwidth=2, hue="Vict Sex", element="step")
+sns.displot(new_df_isolate_vict_age, x="Vict Age", binwidth=2, hue="Vict Sex", element="step")
 
 #c) Stacked histogram
-sns.displot(updated_vict_age_df, x="Vict Age", binwidth=2, hue="Vict Sex", multiple="stack")
+sns.displot(new_df_isolate_vict_age, x="Vict Age", binwidth=2, hue="Vict Sex", multiple="stack")
 
 #d) Dodge bars
-sns.displot(updated_vict_age_df, x="Vict Age", binwidth=6, hue="Vict Sex", multiple="dodge")
+sns.displot(new_df_isolate_vict_age, x="Vict Age", binwidth=6, hue="Vict Sex", multiple="dodge")
 
 #e) Normalized histogram statistics
-sns.displot(updated_vict_age_df, x="Vict Age", binwidth=5, hue="Vict Sex", stat="density" , common_norm=False)
+sns.displot(new_df_isolate_vict_age, x="Vict Age", binwidth=5, hue="Vict Sex", stat="density", common_norm=False)
 
 #f) Kernel density estimation (choosing the smoothing bandwidth)
-sns.displot(updated_vict_age_df, x="Vict Age", kind="kde", bw_adjust=.50)
+sns.displot(new_df_isolate_vict_age, x="Vict Age", kind="kde", bw_adjust=.50)
 
 #g) Empirical cumulative distributions
-sns.displot(updated_vict_age_df, x="Vict Age", kind="ecdf")
+sns.displot(new_df_isolate_vict_age, x="Vict Age", kind="ecdf")
 
 
 
@@ -339,19 +342,19 @@ print(" ")
 print("CrossTab Relationships between LA District and Time Occurred:")
 print(" ")
 
-print(pd.crosstab(df["AREA NAME"],df["TIME OCC"]))
+print(pd.crosstab(new_df["AREA NAME"],new_df["TIME OCC"]))
 
 print(" ")
 print("CrossTab Relationships between Months and Time Occurred:")
 print(" ")
 
-print(pd.crosstab(df["Month"],df["TIME OCC"]))
+print(pd.crosstab(new_df["Month"],new_df["TIME OCC"]))
 
 print(" ")
 print("CrossTab Relationships between Seasons and Time Occurred:")
 print(" ")
 
-print(pd.crosstab(df["Seasons"],df["TIME OCC"]))
+print(pd.crosstab(new_df["Seasons"],new_df["TIME OCC"]))
 
 #b) Now use proportions or percentages rather than raw counts (use the “normalize” parameter from crosstab())
 
@@ -359,29 +362,33 @@ print(" ")
 print("CrossTab Relationships between LA District and Time Occurred (Proportion):")
 print(" ")
 
-print(pd.crosstab(df["AREA NAME"],df["TIME OCC"], normalize="all"))
-print(pd.crosstab(df["AREA NAME"],df["TIME OCC"], normalize="index"))
-print(pd.crosstab(df["AREA NAME"],df["TIME OCC"], normalize="columns"))
+print(pd.crosstab(new_df["AREA NAME"],new_df["TIME OCC"], normalize="all"))
+print(pd.crosstab(new_df["AREA NAME"],new_df["TIME OCC"], normalize="index"))
+print(pd.crosstab(new_df["AREA NAME"],new_df["TIME OCC"], normalize="columns"))
 
 print(" ")
 print("CrossTab Relationships between Months and Time Occurred (Proportion):")
 print(" ")
 
-print(pd.crosstab(df["Month"],df["TIME OCC"], normalize="all"))
-print(pd.crosstab(df["Month"],df["TIME OCC"], normalize="index"))
-print(pd.crosstab(df["Month"],df["TIME OCC"], normalize="columns"))
+print(pd.crosstab(new_df["Month"],new_df["TIME OCC"], normalize="all"))
+print(pd.crosstab(new_df["Month"],new_df["TIME OCC"], normalize="index"))
+print(pd.crosstab(new_df["Month"],new_df["TIME OCC"], normalize="columns"))
 
 print(" ")
 print("CrossTab Relationships between Seasons and Time Occurred (Proportion):")
 print(" ")
 
-print(pd.crosstab(df["Seasons"],df["TIME OCC"], normalize="all"))
-print(pd.crosstab(df["Seasons"],df["TIME OCC"], normalize="index"))
-print(pd.crosstab(df["Seasons"],df["TIME OCC"], normalize="columns"))
+print(pd.crosstab(new_df["Seasons"],new_df["TIME OCC"], normalize="all"))
+print(pd.crosstab(new_df["Seasons"],new_df["TIME OCC"], normalize="index"))
+print(pd.crosstab(new_df["Seasons"],new_df["TIME OCC"], normalize="columns"))
 
 #c) Generate at least one three-way frequency table (3 or more variables, by giving a list of variables to crosstab() rather than single variables)
 
-print(pd.crosstab(index=[df["AREA NAME"],df["TIME OCC"]], columns=df["Month"]))
+print(" ")
+print("Three-way CrossTab Relationships between LA District, Time Occurred and Months:")
+print(" ")
+
+print(pd.crosstab(index=[new_df["AREA NAME"],new_df["TIME OCC"]], columns=new_df["Month"]))
 
     
 
