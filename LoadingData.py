@@ -18,7 +18,7 @@ df = pd.read_csv("/Users/isabel/Desktop/Crime_Data_from_2020_to_Present.csv")
 
 
                 #LIA deliverable 2: Visualizing your dataset
-
+"""
 date_occured = df["DATE OCC"]
 area = df["AREA NAME"]
 time_occ = df['TIME OCC']
@@ -199,7 +199,7 @@ plt.ylabel('Number of crimes') # Title of Y axis
 plt.title('Crimes committed depending on the time of day (2020-2024)') # Title of Graph 
 plt.show() # Displays the graph
 
-
+"""
 # =============================================================================
 # 
 # =============================================================================
@@ -213,66 +213,73 @@ plt.show() # Displays the graph
 
 #a) Initial data inspection:
 print(" ")
-print("Overview of the Data Structure:")
+print("Overview of the Data Structure:") # Title for organization
 print(" ")
 
-print(df.head())
+print(df.head()) # .head(): provides summery of the dataset, with the columns and rows and whats found in those cells
 print(" ")
-print(df.info())
+print(df.info()) # .info(): provides the amount of not empty (non-null) cells within each column (listing each one) and total columns in the dataset
 print(" ")
-print(df.describe())
+print(df.describe()) # .describe(): does statistical test on the data in the dataset
 
 
 #b) Handle duplicate entries:
 print(" ")
-print("Identifying Duplicates:")
+print("Identifying Duplicates:") # Title for organization
 print(" ")
 
-print(df.duplicated())
+print(df.duplicated()) # .duplicated(): lists the rows and determines if duplicates are or arent found inside by outputting "True" or "False"
 
 
 #c) Identify missing values:
   
 print(" ")
-print("Identifying Missing Values:")
+print("Identifying Missing Values:") # Title for organization
 print(" ")
 
-print(df.isnull())
+print(df.isnull()) # .insull(): crosstab of columns and rows and determines if a cell is empty (nul) by outputting "True" or "False"
 
 #c) Managing missing values:
 
     #option 1 - fill categorical missing values with some string of your choice. Justify your decision.
 
-df["Vict Sex"] = df["Vict Sex"].map({"X": "U", "H": "U","-": "U", "F": "F","M": "M"})
+#organizing the column more (explained on the report)
+df["Vict Sex"] = df["Vict Sex"].map({"X": "U", "H": "U","-": "U", "F": "F","M": "M"}) # .map(): applies what is stated to the dataset, so the changes we wanted for the variables in the cells for that column are applied
 
-filled_vict = {"Vict Sex":"U"}
 
-new_df = df.fillna(filled_vict)
+
+filled_vict = {"Vict Sex":"U"} #stating the target column and what will be used to fill
+
+new_df = df.fillna(filled_vict) #.fillna(): filling NA, NA as in empty (null) cell with what is stated 
 
 
 #d) Correct data types and formats
 
-new_df["Month"] = new_df["DATE OCC"].str[:2]
+# correcting format
+new_df["Month"] = new_df["DATE OCC"].str[:2] # new column that is only the first 2 variable of the "DATE OCC" column, which is the month the crime occured
 
-Seasons = []
+Seasons = [] # List that is currently empty
 
-for s in new_df["Month"]:
-  if s in ["12", "01", "02"]:
-      Seasons.append("Winter")
-  elif s in ["03", "04", "05"]:
-      Seasons.append("Spring")
-  elif s in ["06", "07", "08"]:
-      Seasons.append("Summer")
-  else:
-      Seasons.append("Fall")
+for s in new_df["Month"]: # "For" loop that goes throught the "Month" column, applies months to the conditions --> filters it accordingly 
+  if s in ["12", "01", "02"]: # <CONDITION> if the months corespond to those listed...
+      Seasons.append("Winter") # adding to the list 'Seasons', the season "Winter" that correspond to months listed
+  elif s in ["03", "04", "05"]: # <CONDITION> if the months corespond to those listed
+      Seasons.append("Spring") # adding to the list 'Seasons', the season "Spring" that correspond to months listed
+  elif s in ["06", "07", "08"]: # <CONDITION> if the months corespond to those listed
+      Seasons.append("Summer") # adding to the list 'Seasons', the season "Summer" that correspond to months listed
+  else:                         # <CONDITION> if none correspond, whats left
+      Seasons.append("Fall") # adding to the list 'Seasons', the season "Fall" that correspond to months listed
 
-new_df["Seasons"] = Seasons
+new_df["Seasons"] = Seasons #turn list "Seasons" as a new column based off what is a above
+
 
 #c) Managing missing values:
 
     #option 2 - drop rows with missing values
-    
-new_df_isolate_vict_age = new_df.drop(new_df[new_df["Vict Age"] == 0].index)
+   
+new_df_isolate_vict_age = new_df.drop(new_df[new_df["Vict Age"] == 0].index) #.drop(): deletes rows where "0" is found within the column stated
+
+
 
 # 2. Univariate non-graphical EDA
 
@@ -281,33 +288,34 @@ new_df_isolate_vict_age = new_df.drop(new_df[new_df["Vict Age"] == 0].index)
 # 1 only - Vict Age
 
 print(" ")
-print("Descriptive Statistics of Victim Age:")
+print("Descriptive Statistics of Victim Age:") # Title for organization
 print(" ")
 
-print(new_df_isolate_vict_age["Vict Age"].describe())
-print("median :",new_df_isolate_vict_age["Vict Age"].median())
-print("skewness :",new_df_isolate_vict_age["Vict Age"].skew())
-print("kurtosis :",new_df_isolate_vict_age["Vict Age"].kurtosis())
+print(new_df_isolate_vict_age["Vict Age"].describe()) # .describe(): does statistical test on the values in column stated
+print("median :",new_df_isolate_vict_age["Vict Age"].median()) # .median(): calculates the median on the values in column stated
+print("skewness :",new_df_isolate_vict_age["Vict Age"].skew()) # .skew(): calculates the skewness on the values in column stated
+print("kurtosis :",new_df_isolate_vict_age["Vict Age"].kurtosis()) # .kurtosis(): calculates for the kurtosis on the values in column stated
+
+
 
 # Categorical Value
-
 # 5 different - Vict Sex - DATE OCC - AREA NAME - TIME OCC
 
 print(" ")
-print("Descriptive Statistics of the Different Categorical Variables:")
+print("Descriptive Statistics of the Different Categorical Variables:") # Title for organization
 print(" ")
 
-crime_data_categorical = ["Vict Sex", "DATE OCC", "AREA NAME", "TIME OCC"]
+crime_data_categorical = ["Vict Sex", "DATE OCC", "AREA NAME", "TIME OCC", "Month", "Seasons"] #list of the column names desired
 
-for i in crime_data_categorical:
-    print("Frequency of", i, ":")
-    print(new_df[i].value_counts())
+for i in crime_data_categorical: # "For" loop that goes throught the desired name of the columns in our data within a list, applies them to the each (variable in that specific column) to whats within the "For" loop
+    print("Frequency of", i, ":") # Title for organization
+    print(new_df[i].value_counts()) # .value_counts(): calculates frequency, the amount the variable appears
     print(" ")
-    print("Proportion of", i, ":")
-    print(new_df[i].value_counts(normalize=True))
+    print("Proportion of", i, ":") # Title for organization
+    print(new_df[i].value_counts(normalize=True)) #.value_counts(): calculates proportion, the amount the variable appears in decimal form (percentage)
     print(" ")
-    print("Mode of", i, ":")
-    print(new_df[i].mode())
+    print("Mode of", i, ":") # Title for organization
+    print(new_df[i].mode()) #.mode(): calculates for the mode, which list the most frequent variable
     print(" ")
 
 
@@ -317,186 +325,163 @@ for i in crime_data_categorical:
     #We ony have one numerical variable (sorry sir Tiago) --> Victim Age (Vict Age)
 
 #b) Conditioning on other variables
-sns.displot(new_df_isolate_vict_age, x="Vict Age", binwidth=2, hue="Vict Sex", element="step")
+sns.displot(new_df_isolate_vict_age, x="Vict Age", binwidth=2, hue="Vict Sex", element="step") # seaborn plot --> step hisotgram, overlap shown
 
 #c) Stacked histogram
-sns.displot(new_df_isolate_vict_age, x="Vict Age", binwidth=2, hue="Vict Sex", multiple="stack")
+sns.displot(new_df_isolate_vict_age, x="Vict Age", binwidth=2, hue="Vict Sex", multiple="stack") # seaborn plot --> stack hisotgram, no overlap shown
 
 #d) Dodge bars
-sns.displot(new_df_isolate_vict_age, x="Vict Age", binwidth=6, hue="Vict Sex", multiple="dodge")
+sns.displot(new_df_isolate_vict_age, x="Vict Age", binwidth=6, hue="Vict Sex", multiple="dodge") # seaborn plot --> dodge hisotgram, moves bars horizontally
 
 #e) Normalized histogram statistics
-sns.displot(new_df_isolate_vict_age, x="Vict Age", binwidth=5, hue="Vict Sex", stat="density", common_norm=False)
+sns.displot(new_df_isolate_vict_age, x="Vict Age", binwidth=5, hue="Vict Sex", stat="density", common_norm=False) # seaborn plot --> normalized histogram statistics, normalizes isolated variables among histogram to better compare
 
 #f) Kernel density estimation (choosing the smoothing bandwidth)
-sns.displot(new_df_isolate_vict_age, x="Vict Age", kind="kde", bw_adjust=.50)
+sns.displot(new_df_isolate_vict_age, x="Vict Age", kind="kde", bw_adjust=.50) # seaborn plot --> kernel density estimation distribution plot, continuous density estimate with smoothness determined by us
 
 #g) Empirical cumulative distributions
-sns.displot(new_df_isolate_vict_age, x="Vict Age", kind="ecdf")
+sns.displot(new_df_isolate_vict_age, x="Vict Age", kind="ecdf")  # seaborn plot --> empirical cumulative distribution plot, draws curve that represents the proportion 
 
 
 
 
 # 4. Multivariate non-graphical EDA
 
-#a) Make use of this approach at least 3 times with different variables from your dataset.
-print(" ")
-print("CrossTab Relationships between LA District and Time Occurred:")
-print(" ")
+crosstab_variables = ["AREA NAME", "Month", "Seasons" ] #list of the column names desired
 
-print(pd.crosstab(new_df["AREA NAME"],new_df["TIME OCC"]))
+for i in crosstab_variables: # "For" loop that goes throught the desired name of the columns in our data within a list, applies them to the each (variable in that specific column) to whats within the "For" loop
+    print("CrossTab Relationships between", i, "and Time Occurred:") # Title for organization
+    print(pd.crosstab(new_df[i],new_df["TIME OCC"])) # .crosstab(): makes a cross tabulation of the two columns listed, displaying the frequency of that crossover
+    print("CrossTab Relationships between", i, "and Time Occurred (Proportion):") # Title for organization
+    print(pd.crosstab(new_df[i], new_df["TIME OCC"], normalize="all")) # .crosstab(..., normalize="all"): makes a cross tabulation of the two columns listed, displaying the frequency of that crossover --> normalizing over all the values, decimal it represents from all values
+    print(pd.crosstab(new_df[i], new_df["TIME OCC"], normalize="index")) # .crosstab(..., normalize="index"): makes a cross tabulation of the two columns listed, displaying the frequency of that crossover --> normalizing over each row the values, decimal it represents from each row values
+    print(pd.crosstab(new_df[i], new_df["TIME OCC"], normalize="columns")) # .crosstab(.., normalize="columns"): makes a cross tabulation of the two columns listed, displaying the frequency of that crossover --> normalizing over each column the values, decimal it represents from each column values
 
-print(" ")
-print("CrossTab Relationships between Months and Time Occurred:")
-print(" ")
-
-print(pd.crosstab(new_df["Month"],new_df["TIME OCC"]))
-
-print(" ")
-print("CrossTab Relationships between Seasons and Time Occurred:")
-print(" ")
-
-print(pd.crosstab(new_df["Seasons"],new_df["TIME OCC"]))
-
-#b) Now use proportions or percentages rather than raw counts (use the “normalize” parameter from crosstab())
-
-print(" ")
-print("CrossTab Relationships between LA District and Time Occurred (Proportion):")
-print(" ")
-
-print(pd.crosstab(new_df["AREA NAME"],new_df["TIME OCC"], normalize="all"))
-print(pd.crosstab(new_df["AREA NAME"],new_df["TIME OCC"], normalize="index"))
-print(pd.crosstab(new_df["AREA NAME"],new_df["TIME OCC"], normalize="columns"))
-
-print(" ")
-print("CrossTab Relationships between Months and Time Occurred (Proportion):")
-print(" ")
-
-print(pd.crosstab(new_df["Month"],new_df["TIME OCC"], normalize="all"))
-print(pd.crosstab(new_df["Month"],new_df["TIME OCC"], normalize="index"))
-print(pd.crosstab(new_df["Month"],new_df["TIME OCC"], normalize="columns"))
-
-print(" ")
-print("CrossTab Relationships between Seasons and Time Occurred (Proportion):")
-print(" ")
-
-print(pd.crosstab(new_df["Seasons"],new_df["TIME OCC"], normalize="all"))
-print(pd.crosstab(new_df["Seasons"],new_df["TIME OCC"], normalize="index"))
-print(pd.crosstab(new_df["Seasons"],new_df["TIME OCC"], normalize="columns"))
 
 #c) Generate at least one three-way frequency table (3 or more variables, by giving a list of variables to crosstab() rather than single variables)
 
 print(" ")
-print("Three-way CrossTab Relationships between LA District, Time Occurred and Months:")
+print("Three-way CrossTab Relationships between LA District, Time Occurred and Months:") # Title for organization
 print(" ")
 
-print(pd.crosstab(index=[new_df["AREA NAME"],new_df["TIME OCC"]], columns=new_df["Month"]))
+print(pd.crosstab(index=[new_df["AREA NAME"],new_df["TIME OCC"]], columns=new_df["Month"])) # .crosstab(): makes a cross tabulation of the three columns listed
 
     
 
-"""
+
 # 5. Multivariate graphical EDA (18 plots)
+
+#what the code whould have looked like :<
+#THIS CODE does not run please dont attempt '-', just wanted to show that we knew how to execute what you wanted for this deliverable (sorry again sir Tiago)
+
+"""
 
 # statistical relationships (5 plots):
 #a) plot using Faceting feature (col parameter in the relplot() function)
 
-sns.displot(new_df_isolate_vict_age, x="Vict Age", col="Vict Sex")
+sns.displot(df, x='a numerical variable', y='a numerical variable', col='a categorical variable')
+
 
 #b) plot representing 5 variables at once (x, y, hue, size, col)
 
-sns.displot(new_df_isolate_vict_age, x="Vict Age", hue="AREA NAME", size="Seasons", col="Vict Sex")
+sns.displot(df, x='a numerical variable', y='a numerical variable', hue='a categorical variable', size='another categorical variable', col='another categorical variable')
+
 
 #c) plot using line instead of points (find a variable that makes sense emphasizing continuity and explain why)
 
-sns.relplot(new_df_isolate_vict_age, x="Vict Age", y='something' kind="line")
+sns.relplot(df, x='a numerical variable', y='a numerical variable', kind="line")
+
 
 #d) plot illustrating standard deviation
 
-sns.relplot(new_df_isolate_vict_age, x="Vict Age", y='something', errorbar="sd", kind="line")
+sns.relplot(df, x='a numerical variable', y='a numerical variable', errorbar="sd", kind="line")
+
 
 #e) plot including a linear regression
 
-sns.lmplot(new_df_isolate_vict_age, x="Vict Age", y='something', col="Vict Sex", hue="AREA NAME")
+sns.lmplot(df, x='a numerical variable', y='a numerical variable', col="Vict Sex", hue="AREA NAME")
 
 """
 
 
+
+"""
 # categorical data (10 plots):
 #a) categorical scatter plot with jitter enabled
 
-sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age")
+sns.catplot(new_df, x='a categorical variable', y='a numerical variable')
+plt.show()
+
 
 #b) categorical scatter plot with jitter disabled (explain your choice of variable for this one)
 
-sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", jitter=False)
+sns.catplot(new_df, x='a categorical variable', y='a numerical variable', jitter=False)
+plt.show()
+
 
 #c) “beeswarm” plot representing 3 variables
 
-sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", kind="swarm")
+sns.catplot(new_df, x='a categorical variable', y='a numerical variable', hue='another categorical variable', kind="swarm")
+plt.show()
+
 
 #d) box plot representing 3 variables
 
-sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", hue="Vict Sex", kind="box")
+sns.catplot(new_df, x='a categorical variable', y='a numerical variable', hue='another categorical variable', kind="box")
+plt.show()
+
 
 #e) box plot showing the shape of the distribution (boxenplot())
 
-sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", kind="boxen")
+sns.catplot(new_df, x='a categorical variable', y='a numerical variable', kind="boxen")
+plt.show()
+
 
 #f) split violin plot representing 3 variables with bandwidth adjusted for better visualization
 
-sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", hue="Vict Sex", kind="violin", bw_adjust=4 )
+sns.catplot(new_df, x='a categorical variable', y='a numerical variable', hue="Vict Sex", kind="violin", bw_adjust=4 )
+plt.show()
+
 
 #g) violin plot with scatter points inside the violin shapes
 
-v = sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", kind="violin", inner=None)
-sns.swarmplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age",ax=v.ax)
+v = sns.catplot(new_df, x='a categorical variable', y='a numerical variable', kind="violin", inner=None)
+sns.swarmplot(new_df, x='a categorical variable', y="Vict Age",ax=v.ax)
+plt.show()
+
 
 #h) bar plot representing 3 variables showing 97% confidence intervals
 
-sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", hue="Vict Sex", kind="bar", errorbar=("pi", 97))
-            
+sns.catplot(new_df, x='a categorical variable', y='a numerical variable', hue='another categorical variable', kind="bar", errorbar=("pi", 97))
+plt.show()
+ 
+           
 #i) point plot representing 3 variables showing 90% confidence intervals and lines in dashed style
 
-sns.catplot(new_df_isolate_vict_age, x="Seasons", y="Vict Age", hue="Vict Sex", kind="point", linestyles=["-", "- -"], errorbar=("pi", 90))
+sns.catplot(new_df, x='a categorical variable', y='a numerical variable', hue='another categorical variable', kind="point", linestyles=["-", "- -"], errorbar=("pi", 90))
+plt.show()
+
 
 #j) bar plot showing the number of observations in each category
 
+sns.catplot(new_df, x='a categorical variable', y='a numerical variable', hue='another categorical variable', kind="bar")
 
 
 # bivariate distributions (3 plots):
 #a) “heatmap” plot representing 2 variables with color intensity bar and adjusted bin width.
 
+sns.displot(new_df, x='a numerical variable', y='a numerical variable', binwidth=(2, .5), cbar=True)
 
 
 #b) distribution plot with 2 variables making use of bivariate density contours with amount of curves and its lowest level adjusted (use a kernel density estimation displot()).
 
+sns.displot(new_df, x='a numerical variable', y='a numerical variable', levels=0.2, thresh=0.1 )
 
 
 #c) “heatmap” plot representing 3 variables, again of kind kde.
 
+sns.displot(new_df, x='a numerical variable', y='a numerical variable', hue='another categorical variable', kind="kde")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+"""
 
 
