@@ -263,7 +263,7 @@ new_df["Year"] = new_df["DATE OCC"].str[6:10] # new column that is only the 6th 
 
 #deletion that needs to happen here
 
-new_df.drop(new_df[new_df["Year"] != 2025].index) #.drop(): deletes rows where "2025" is found within the column stated
+new_df.drop(new_df[new_df["Year"] == 2025].index) #.drop(): deletes rows where "2025" is found within the column stated
 
 
 # more correcting format for new columns
