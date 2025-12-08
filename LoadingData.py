@@ -256,8 +256,6 @@ new_df = df.fillna(filled_vict) #.fillna(): filling NA, NA as in empty (null) ce
 # correcting format
 new_df["Month"] = new_df["DATE OCC"].str[:2] # new column that is only the first 2 variable of the "DATE OCC" column, which is the month the crime occured
 
-new_df["Day"] = new_df["DATE OCC"].str[3:5] # new column that is only the 3rd and 4th variable of the "DATE OCC" column, which is the day the crime occured
-
 new_df["Year"] = new_df["DATE OCC"].str[6:10] # new column that is only the 6th and 9th variable of the "DATE OCC" column, which is the day the crime occured
 
 
@@ -319,13 +317,13 @@ print("kurtosis :",new_df["dist_to_downtown_km"].kurtosis()) # .kurtosis(): calc
 
 
                             # Categorical Value 
-            # Vict Sex - Day - AREA NAME - occ_hour - Month - Seasons
+            # Vict Sex - AREA NAME - occ_hour - Month - Seasons
 
 print(" ")
 print("Descriptive Statistics of the Different Categorical Variables:") # Title for organization
 print(" ")
 
-crime_data_categorical = ["Vict Sex", "Day", "AREA NAME", "occ_hour", "Month", "Seasons"] #list of the column names desired
+crime_data_categorical = ["Vict Sex", "AREA NAME", "occ_hour", "Month", "Seasons"] #list of the column names desired
 
 for i in crime_data_categorical: # "For" loop that goes throught the desired name of the columns in our data within a list, applies them to the each (variable in that specific column) to whats within the "For" loop
     print("Frequency of", i, ":") # Title for organization
@@ -431,8 +429,13 @@ print(pd.crosstab(index=[new_df["AREA NAME"],new_df["occ_hour"]], columns=new_df
                 #LIA deliverable 4: Adjustments   
                 
                 
-                    #creating a sample for the plots
+                    #creating a sample for the plots and palettes
+                    
 sample_size = new_df.sample(n=700)
+
+gender_palette = {"U":"#735D78","F": "#CE6A85", "M": "#7583B4"} # colours for the genders, M (blue), F (pink), U (purple)
+
+weekend_palette= {0:"#890620", 1:"#3a5a40"} # colours for if it is (green) or isnt (red) the weekend
 
 
                 #more appropriate plots for our project
@@ -451,37 +454,54 @@ plt.tight_layout() # makes sure titles dont overlap
 plt.show() # displays the plot
 
 
-sns.countplot(new_df, x="occ_hour", order=["0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11","12","13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"], hue="occ_hour", palette="twilight" ) # seaborn plot --> counts frequency of categorical data and reprsents it in a bar plot
+sns.countplot(new_df, x="occ_hour", order=["0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"], hue="occ_hour", palette="twilight" ) # seaborn plot --> counts frequency of categorical data and reprsents it in a bar plot
+plt.show() # displays the plot
+
+# violin plot
+
+sns.catplot(new_df, x="is_weekend", y="dist_to_downtown_km", kind="violin", hue="Vict Sex", palette=gender_palette ) # seaborn plot --> violinplot, box and kernel density distribution, description of distribution of data
 plt.show() # displays the plot
 
 
 
-                                #plots
-
-
-    # statistical data
+                       # statistical data (5 plots)
 
 #a) plot using Faceting feature (col parameter in the relplot() function)
 
 sns.displot(sample_size, x="dist_to_downtown_km", y="Vict Age", col="is_weekend") # seaborn plot --> bivariate displot, one for the weekend and one for the week
 plt.show() # displays the plot
 
-#b) plot representing 5 variables at once (x, y, hue, size, col)
 
-weekend_palette= {0:"#890620", 1:"#3a5a40"} # colours for if it is (green) or isnt (red) the weekend
+#b) plot representing 5 variables at once (x, y, hue, size, col)
 
 sns.displot(sample_size, x="dist_to_downtown_km", y="Vict Age", hue="is_weekend", palette=weekend_palette, col="Vict Sex")  # seaborn plot --> bivariate displot, more variables displayed
 plt.show() # displays the plot
 
-   # size doesnt seem to work with displot where an x and y is stated, we dismissed it
+   # --> size doesnt seem to work with displot where an x and y is stated, we dismissed it
+
+
+#c) plot using line instead of points (find a variable that makes sense emphasizing continuity and explain why)        (TALK TO YOLINA)
+
+sns.relplot(sample_size, x="dist_to_downtown_km", y="Vict Age", kind="line")
+plt.tight_layout()
+plt.show() # displays the plot
+
+#d) plot illustrating standard deviation                                                                               (TALK TO YOLINA)
+
+sns.relplot(sample_size, x="dist_to_downtown_km", y="Vict Age", errorbar="sd", kind="line")
+plt.tight_layout()
+plt.show() # displays the plot
+
+#e) plot including a linear regression
+
+sns.lmplot(sample_size, x="dist_to_downtown_km", y="Vict Age", col="Vict Sex", hue="is_weekend", palette=weekend_palette)
 
 
 
-    # categorical data
+
+                        # categorical data (10 plots)
 
 #a) categorical scatter plot with jitter enabled
-
-gender_palette = {"U":"#735D78","F": "#CE6A85", "M": "#7583B4"} # colours for the genders, M (blue), F (pink), U (purple)
 
 sns.catplot(sample_size, x="Vict Sex", y="Vict Age", hue="Vict Sex", palette=gender_palette) # seaborn plot --> stripplot, jitter shown
 plt.tight_layout() # makes sure titles dont overlap
@@ -499,21 +519,78 @@ plt.show() # displays the plot
 sns.catplot(sample_size, x="Vict Sex", y="Vict Age", hue="AREA NAME", palette="twilight", kind="swarm") # seaborn plot --> swarmplot, points arranged in a way that makes them not overlap (algorithm)
 plt.show() # displays the plot
 
-
+#d) box plot representing 3 variables
+"""
 sns.catplot(sample_size, x="Vict Age", y="AREA NAME",hue="Vict Sex", palette=gender_palette, kind="box") # seaborn plot --> boxplot, distribution of data shown (whiskers, box, outlier if applicable)
 plt.tight_layout() # makes sure titles dont overlap
 plt.show() # displays the plot
-
+"""
 
 sns.catplot(sample_size, x="Vict Sex", y="dist_to_downtown_km", hue="is_weekend", palette=weekend_palette, kind="box") # seaborn plot --> boxplot, distribution of data shown (whiskers, box, outlier if applicable)
 plt.show() # displays the plot
 
 
+
+
+
+
 #e) box plot showing the shape of the distribution (boxenplot())
 
-sns.catplot(new_df, x="is_weekend", y="dist_to_downtown_km", kind="violin", hue="Vict Sex", palette=gender_palette ) # seaborn plot --> violinplot, box and kernel density distribution, description of distribution of data
-plt.show() # displays the plot
+sns.catplot(sample_size, x="is_weekend", y="dist_to_downtown_km", hue="is_weekend", palette=weekend_palette, kind="boxen")
+plt.show()
 
+
+#f) split violin plot representing 3 variables with bandwidth adjusted for better visualization
+
+sns.catplot(sample_size, x="Vict Sex", y="dist_to_downtown_km", hue="is_weekend",palette=weekend_palette, inner="stick", split=True, kind="violin", bw_adjust=4 )
+plt.show()
+
+
+#g) violin plot with scatter points inside the violin shapes
+
+v = sns.catplot(sample_size, x="Vict Sex", y="Vict Age", hue="Vict Sex", palette=gender_palette, kind="violin", inner=None)
+sns.swarmplot(sample_size, x="Vict Sex", y="Vict Age", ax=v.ax)
+plt.show()
+
+
+#h) bar plot representing 3 variables showing 97% confidence intervals
+
+sns.catplot(sample_size, x="Vict Sex", y="dist_to_downtown_km", hue="is_weekend", palette=weekend_palette, kind="bar", errorbar=("pi", 97))
+plt.show()
+ 
+         
+#i) point plot representing 3 variables showing 90% confidence intervals and lines in dashed style
+
+sns.catplot(sample_size, x="Vict Sex", y="dist_to_downtown_km", hue="is_weekend", palette=weekend_palette, linestyles=["--","--"], kind="point", errorbar=("pi", 90))
+plt.show()
+
+sns.catplot(sample_size, x="is_weekend", y="dist_to_downtown_km", hue="Vict Sex", palette=gender_palette, linestyles=["--","--","--"], kind="point", errorbar=("pi", 90))
+plt.show()
+
+
+#j) bar plot showing the number of observations in each category
+
+sns.catplot(sample_size, x="Vict Age", y="AREA NAME", hue="Vict Sex", palette=gender_palette, kind="bar")
+
+
+
+
+                # bivariate distributions (3 plots)
+
+
+#a) “heatmap” plot representing 2 variables with color intensity bar and adjusted bin width.
+
+sns.displot(sample_size, x="dist_to_downtown_km", y="Vict Age", binwidth=(2, .5), cbar=True)
+
+
+#b) distribution plot with 2 variables making use of bivariate density contours with amount of curves and its lowest level adjusted (use a kernel density estimation displot()).
+
+sns.displot(sample_size, x="dist_to_downtown_km", y="Vict Age", kind="kde", levels=[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9], thresh=0.1 )
+
+
+#c) “heatmap” plot representing 3 variables, again of kind kde.
+
+sns.displot(sample_size, x="dist_to_downtown_km", y="Vict Age", hue="Vict Sex", palette=gender_palette, kind="kde")
 
 
 
